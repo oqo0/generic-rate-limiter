@@ -15,15 +15,11 @@ namespace GenericRateLimiter
             wasteCleaner.StartPeriodicCleanup();
         }
         
-        public void AddOrUpdate(TId id, IEnumerable<ActionRateLimiter> rateLimiters)
+        public void AddOrUpdate(TId id, CompositeRateLimiter compositeRateLimiter)
         {
-            var newRateLimiters = rateLimiters
-                .Select(rl => new ActionRateLimiter(rl.Limit, rl.Period))
-                .ToList();
-            
             _rateLimitedEntities.AddOrUpdate(id,
-                _ => new CompositeRateLimiter(newRateLimiters),
-                (_, _) => new CompositeRateLimiter(newRateLimiters));
+                _ => compositeRateLimiter,
+                (_, existingValue) => existingValue);
         }
 
         public bool TryGet(TId id, out CompositeRateLimiter? rateLimiter)

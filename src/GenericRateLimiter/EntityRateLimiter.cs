@@ -33,7 +33,7 @@ namespace GenericRateLimiter
                 .ToList();
             
             compositeRateLimiter = new CompositeRateLimiter(actionRateLimiters);
-            _rateLimiterRepository.AddOrUpdate(id, actionRateLimiters);
+            _rateLimiterRepository.AddOrUpdate(id, compositeRateLimiter);
 
             return compositeRateLimiter.Trigger() ? RateLimitStatus.Limited : RateLimitStatus.Accessible;
         }
