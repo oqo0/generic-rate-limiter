@@ -3,7 +3,7 @@
 /// <summary>
 /// Represents a set of rate limiters.
 /// </summary>
-public class CompositeRateLimiter
+internal class CompositeRateLimiter
 {
     private readonly IList<ActionRateLimiter> _rateLimiters;
 

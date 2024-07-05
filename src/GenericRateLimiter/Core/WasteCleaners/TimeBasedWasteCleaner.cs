@@ -2,7 +2,7 @@
 
 namespace GenericRateLimiter.Core.WasteCleaners;
 
-public class TimeBasedWasteCleaner<TId>(
+internal class TimeBasedWasteCleaner<TId>(
     ConcurrentDictionary<TId, CompositeRateLimiter> rateLimitedEntities,
     WasteCleanerSettings wasteCleanerSettings)
     : IWasteCleaner

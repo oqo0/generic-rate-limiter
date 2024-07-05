@@ -4,7 +4,7 @@ using GenericRateLimiter.Core.WasteCleaners;
 
 namespace GenericRateLimiter
 {
-    public class RateLimiterRepository<TId>
+    internal class RateLimiterRepository<TId>
         where TId : notnull
     {
         private readonly ConcurrentDictionary<TId, CompositeRateLimiter> _rateLimitedEntities = new();

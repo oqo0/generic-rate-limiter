@@ -1,6 +1,6 @@
 ﻿namespace GenericRateLimiter.Core.WasteCleaners;
 
-public interface IWasteCleaner
+internal interface IWasteCleaner
 {
     public void StartPeriodicCleanup(); 
     public Task Cleanup();

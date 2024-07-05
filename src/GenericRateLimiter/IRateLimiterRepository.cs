@@ -2,7 +2,7 @@
 
 namespace GenericRateLimiter;
 
-public interface IRateLimiterRepository<in TId>
+internal interface IRateLimiterRepository<in TId>
     where TId : notnull
 {
     public void AddOrUpdate(TId id, IEnumerable<ActionRateLimiter> rateLimiters);
