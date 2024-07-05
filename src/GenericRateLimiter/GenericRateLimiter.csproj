@@ -4,8 +4,13 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PackageId>oqo0.GenericRateLimiter</PackageId>
+        <Version>0.0.2</Version>
+        <Authors>oqo0</Authors>
+        <RepositoryUrl>https://github.com/oqo0/generic-rate-limiter</RepositoryUrl>
     </PropertyGroup>
-
+    
     <ItemGroup>
       <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.1.1" />
     </ItemGroup>
