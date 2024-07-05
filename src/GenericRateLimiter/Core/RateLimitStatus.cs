@@ -1,4 +1,4 @@
-﻿namespace GenericRateLimiter;
+﻿namespace GenericRateLimiter.Core;
 
 public enum RateLimitStatus
 {

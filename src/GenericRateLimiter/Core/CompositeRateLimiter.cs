@@ -1,4 +1,4 @@
-﻿namespace GenericRateLimiter;
+﻿namespace GenericRateLimiter.Core;
 
 /// <summary>
 /// Represents a set of rate limiters.

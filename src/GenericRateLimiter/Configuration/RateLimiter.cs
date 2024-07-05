@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using GenericRateLimiter.Core;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace GenericRateLimiter.Configuration;
 

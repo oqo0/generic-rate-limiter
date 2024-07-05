@@ -1,4 +1,6 @@
-﻿namespace GenericRateLimiter;
+﻿using GenericRateLimiter.Core;
+
+namespace GenericRateLimiter;
 
 public interface IEntityRateLimiter<in TId>
     where TId : notnull

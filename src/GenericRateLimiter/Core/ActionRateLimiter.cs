@@ -1,4 +1,4 @@
-namespace GenericRateLimiter;
+namespace GenericRateLimiter.Core;
 
 /// <summary>
 /// Represents a rate limiter that limits the number of actions within a specified time period.
