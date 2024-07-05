@@ -3,13 +3,24 @@ using GenericRateLimiter.Core.WasteCleaners;
 
 namespace GenericRateLimiter
 {
-    public class EntityRateLimiter<TId>(
-        IEnumerable<ActionRateLimiter> rateLimiters,
-        WasteCleanerSettings wasteCleanerSettings)
+    public class EntityRateLimiter<TId> : IEntityRateLimiter<TId>
         where TId : notnull
     {
-        private readonly RateLimiterRepository<TId> _rateLimiterRepository = new(wasteCleanerSettings);
+        private readonly RateLimiterRepository<TId> _rateLimiterRepository;
+        private readonly IEnumerable<ActionRateLimiter> _rateLimiters;
 
+        public EntityRateLimiter(IEnumerable<ActionRateLimiter> rateLimiters)
+        {
+            _rateLimiters = rateLimiters;
+            _rateLimiterRepository = new RateLimiterRepository<TId>(GetWasteCleanerSettingsForLimiters());
+        }
+
+        public EntityRateLimiter(IEnumerable<ActionRateLimiter> rateLimiters, WasteCleanerSettings wasteCleanerSettings)
+        {
+            _rateLimiters = rateLimiters;
+            _rateLimiterRepository = new RateLimiterRepository<TId>(wasteCleanerSettings);
+        }
+        
         public RateLimitStatus Trigger(TId id)
         {
             bool rateLimiterFound = _rateLimiterRepository.TryGet(id, out var rateLimitersSet) &&
@@ -17,7 +28,7 @@ namespace GenericRateLimiter
             if (rateLimiterFound)
                 return rateLimitersSet!.Trigger() ? RateLimitStatus.Limited : RateLimitStatus.Accessible;
             
-            var newRateLimiters = rateLimiters.Select(
+            var newRateLimiters = _rateLimiters.Select(
                     rl => new ActionRateLimiter(rl.Limit, rl.Period))
                 .ToList();
             
@@ -25,6 +36,13 @@ namespace GenericRateLimiter
             _rateLimiterRepository.AddOrUpdate(id, newRateLimiters);
 
             return rateLimitersSet.Trigger() ? RateLimitStatus.Limited : RateLimitStatus.Accessible;
+        }
+
+        private WasteCleanerSettings GetWasteCleanerSettingsForLimiters()
+        {
+            var longestRateLimiter = _rateLimiters.Max(x => x.Period);
+            return new WasteCleanerSettings(
+                TimeSpan.FromMinutes(1), longestRateLimiter * 2);
         }
     }
 }
