@@ -23,19 +23,19 @@ namespace GenericRateLimiter
         
         public RateLimitStatus Trigger(TId id)
         {
-            bool rateLimiterFound = _rateLimiterRepository.TryGet(id, out var rateLimitersSet) &&
-                                    rateLimitersSet is not null;
+            bool rateLimiterFound = _rateLimiterRepository.TryGet(id, out var compositeRateLimiter) &&
+                                    compositeRateLimiter is not null;
             if (rateLimiterFound)
-                return rateLimitersSet!.Trigger() ? RateLimitStatus.Limited : RateLimitStatus.Accessible;
+                return compositeRateLimiter!.Trigger() ? RateLimitStatus.Limited : RateLimitStatus.Accessible;
             
-            var newRateLimiters = _rateLimiters.Select(
+            var actionRateLimiters = _rateLimiters.Select(
                     rl => new ActionRateLimiter(rl.Limit, rl.Period))
                 .ToList();
             
-            rateLimitersSet = new CompositeRateLimiter(newRateLimiters);
-            _rateLimiterRepository.AddOrUpdate(id, newRateLimiters);
+            compositeRateLimiter = new CompositeRateLimiter(actionRateLimiters);
+            _rateLimiterRepository.AddOrUpdate(id, actionRateLimiters);
 
-            return rateLimitersSet.Trigger() ? RateLimitStatus.Limited : RateLimitStatus.Accessible;
+            return compositeRateLimiter.Trigger() ? RateLimitStatus.Limited : RateLimitStatus.Accessible;
         }
 
         private WasteCleanerSettings GetWasteCleanerSettingsForLimiters()
