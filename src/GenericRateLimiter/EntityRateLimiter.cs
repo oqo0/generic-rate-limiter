@@ -6,7 +6,7 @@ namespace GenericRateLimiter;
 /// A rate limiter that applies rate limiting to entities identified by <typeparamref name="TId"/>.
 /// </summary>
 /// <typeparam name="TId">The type of the identifier for rate limited entities.</typeparam>
-public class EntityRateLimiter<TId>(IEnumerable<ActionRateLimiter> rateLimiters)
+public class EntityRateLimiter<TId>(IEnumerable<ActionRateLimiter> rateLimiters) : IEntityRateLimiter<TId>
     where TId : notnull
 {
     private readonly ConcurrentDictionary<TId, CompositeRateLimiter> _rateLimitedEntities = new();
