@@ -29,7 +29,7 @@ public class ActionRateLimiter
     /// Attempts to trigger the rate limiter without throwing an error.
     /// </summary>
     /// <returns>True if the action is rate limited, otherwise false.</returns>
-    public bool TryTrigger()
+    public bool Trigger()
     {
         lock (_lock)
         {

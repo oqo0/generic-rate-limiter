@@ -32,7 +32,7 @@ public class CompositeRateLimiter
         
         foreach (var rateLimiter in _rateLimiters)
         {
-            if (rateLimiter.TryTrigger())
+            if (rateLimiter.Trigger())
             {
                 return true;
             }
