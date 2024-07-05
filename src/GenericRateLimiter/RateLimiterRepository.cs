@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using GenericRateLimiter.Core;
+using GenericRateLimiter.Core.WasteCleaners;
 
 namespace GenericRateLimiter
 {
@@ -8,6 +9,12 @@ namespace GenericRateLimiter
     {
         private readonly ConcurrentDictionary<TId, CompositeRateLimiter> _rateLimitedEntities = new();
 
+        public RateLimiterRepository(WasteCleanerSettings wasteCleanerSettings)
+        {
+            var wasteCleaner = new TimeBasedWasteCleaner<TId>(_rateLimitedEntities, wasteCleanerSettings);
+            wasteCleaner.StartPeriodicCleanup();
+        }
+        
         public void AddOrUpdate(TId id, IEnumerable<ActionRateLimiter> rateLimiters)
         {
             var newRateLimiters = rateLimiters

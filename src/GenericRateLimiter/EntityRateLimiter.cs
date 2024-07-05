@@ -1,11 +1,14 @@
 ﻿using GenericRateLimiter.Core;
+using GenericRateLimiter.Core.WasteCleaners;
 
 namespace GenericRateLimiter
 {
-    public class EntityRateLimiter<TId>(IEnumerable<ActionRateLimiter> rateLimiters)
+    public class EntityRateLimiter<TId>(
+        IEnumerable<ActionRateLimiter> rateLimiters,
+        WasteCleanerSettings wasteCleanerSettings)
         where TId : notnull
     {
-        private readonly RateLimiterRepository<TId> _rateLimiterRepository = new();
+        private readonly RateLimiterRepository<TId> _rateLimiterRepository = new(wasteCleanerSettings);
 
         public RateLimitStatus Trigger(TId id)
         {
