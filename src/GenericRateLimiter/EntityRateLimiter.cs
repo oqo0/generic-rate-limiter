@@ -1,4 +1,5 @@
 ﻿using GenericRateLimiter.Core;
+using GenericRateLimiter.Core.RateLimiters;
 using GenericRateLimiter.Core.WasteCleaners;
 
 namespace GenericRateLimiter
@@ -7,9 +8,9 @@ namespace GenericRateLimiter
         where TId : notnull
     {
         private readonly RateLimiterRepository<TId> _rateLimiterRepository;
-        private readonly IEnumerable<ActionRateLimiter> _rateLimiters;
+        private readonly IEnumerable<IRateLimiter> _rateLimiters;
 
-        public EntityRateLimiter(IEnumerable<ActionRateLimiter> rateLimiters)
+        public EntityRateLimiter(IEnumerable<IRateLimiter> rateLimiters)
         {
             _rateLimiters = rateLimiters;
             _rateLimiterRepository = new RateLimiterRepository<TId>(GetWasteCleanerSettingsForLimiters());
@@ -29,7 +30,7 @@ namespace GenericRateLimiter
                 return compositeRateLimiter!.Trigger() ? RateLimitStatus.Limited : RateLimitStatus.Accessible;
             
             var actionRateLimiters = _rateLimiters.Select(
-                    rl => new ActionRateLimiter(rl.Limit, rl.Period))
+                    rl => new ActionRateLimiter(rl.GetLimit(), rl.GetPeriod()))
                 .ToList();
             
             compositeRateLimiter = new CompositeRateLimiter(actionRateLimiters);
@@ -40,7 +41,7 @@ namespace GenericRateLimiter
 
         private WasteCleanerSettings GetWasteCleanerSettingsForLimiters()
         {
-            var longestRateLimiter = _rateLimiters.Max(x => x.Period);
+            var longestRateLimiter = _rateLimiters.Max(x => x.GetPeriod());
             return new WasteCleanerSettings(
                 TimeSpan.FromMinutes(1), longestRateLimiter * 2);
         }

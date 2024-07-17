@@ -1,4 +1,5 @@
 ﻿using GenericRateLimiter.Core;
+using GenericRateLimiter.Core.RateLimiters;
 
 namespace GenericRateLimiter.Tests;
 

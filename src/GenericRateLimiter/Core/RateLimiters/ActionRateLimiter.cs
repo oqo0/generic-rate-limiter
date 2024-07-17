@@ -1,12 +1,22 @@
-namespace GenericRateLimiter.Core;
+namespace GenericRateLimiter.Core.RateLimiters;
 
-public class ActionRateLimiter(long limit, TimeSpan period)
+public class ActionRateLimiter(long limit, TimeSpan period) : IRateLimiter
 {
     public long Limit { get; } = limit;
     public TimeSpan Period { get; } = period;
 
     private long _currentLimit = limit;
     private DateTime _lastResetTime = DateTime.UtcNow;
+
+    public long GetLimit()
+    {
+        return Limit;
+    }
+
+    public TimeSpan GetPeriod()
+    {
+        return Period;
+    }
 
     /// <summary>
     /// Triggers the rate limiter.
