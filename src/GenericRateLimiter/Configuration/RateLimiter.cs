@@ -1,5 +1,6 @@
 ﻿using GenericRateLimiter.Configuration.Options;
 using GenericRateLimiter.Core;
+using GenericRateLimiter.Core.RateLimiters;
 using GenericRateLimiter.Core.WasteCleaners;
 using Microsoft.Extensions.DependencyInjection;
 
