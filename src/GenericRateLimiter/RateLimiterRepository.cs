@@ -7,7 +7,7 @@ namespace GenericRateLimiter
     internal class RateLimiterRepository<TId>
         where TId : notnull
     {
-        private readonly ConcurrentDictionary<TId, CompositeRateLimiter> _rateLimitedEntities = new();
+        private readonly ConcurrentDictionary<TId, RateLimiterComposite> _rateLimitedEntities = new();
 
         public RateLimiterRepository(WasteCleanerSettings wasteCleanerSettings)
         {
@@ -15,14 +15,14 @@ namespace GenericRateLimiter
             wasteCleaner.StartPeriodicCleanup();
         }
         
-        public void AddOrUpdate(TId id, CompositeRateLimiter compositeRateLimiter)
+        public void AddOrUpdate(TId id, RateLimiterComposite rateLimiterComposite)
         {
             _rateLimitedEntities.AddOrUpdate(id,
-                _ => compositeRateLimiter,
+                _ => rateLimiterComposite,
                 (_, existingValue) => existingValue);
         }
 
-        public bool TryGet(TId id, out CompositeRateLimiter? rateLimiter)
+        public bool TryGet(TId id, out RateLimiterComposite? rateLimiter)
         {
             return _rateLimitedEntities.TryGetValue(id, out rateLimiter);
         }

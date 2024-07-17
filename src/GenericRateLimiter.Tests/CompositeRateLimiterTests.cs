@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using Xunit;
 
-public class CompositeRateLimiterTests
+public class RateLimiterCompositeTests
 {
     [Fact]
     public void Trigger_ShouldReturnLimited_WhenOneLimiterExceedsLimit()
@@ -17,7 +17,7 @@ public class CompositeRateLimiterTests
             new(1, TimeSpan.FromSeconds(1)),
             new(2, TimeSpan.FromSeconds(5))
         };
-        var compositeRateLimiter = new CompositeRateLimiter(rateLimiters);
+        var compositeRateLimiter = new RateLimiterComposite(rateLimiters);
 
         Assert.False(compositeRateLimiter.Trigger());
         Assert.True(compositeRateLimiter.Trigger());

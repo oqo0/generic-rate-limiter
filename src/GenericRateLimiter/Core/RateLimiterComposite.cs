@@ -5,7 +5,7 @@ namespace GenericRateLimiter.Core;
 /// <summary>
 /// Represents a set of rate limiters.
 /// </summary>
-internal class CompositeRateLimiter
+internal class RateLimiterComposite
 {
     private readonly IList<ActionRateLimiter> _rateLimiters;
 
@@ -15,10 +15,10 @@ internal class CompositeRateLimiter
     public DateTime LastAccessed { get; set; }
     
     /// <summary>
-    /// Initializes a new instance of the <see cref="CompositeRateLimiter"/> class.
+    /// Initializes a new instance of the <see cref="RateLimiterComposite"/> class.
     /// </summary>
     /// <param name="rateLimiters">The collection of rate limiters.</param>
-    internal CompositeRateLimiter(IEnumerable<ActionRateLimiter> rateLimiters)
+    internal RateLimiterComposite(IEnumerable<ActionRateLimiter> rateLimiters)
     {
         _rateLimiters = new List<ActionRateLimiter>(rateLimiters);
         LastAccessed = DateTime.UtcNow;

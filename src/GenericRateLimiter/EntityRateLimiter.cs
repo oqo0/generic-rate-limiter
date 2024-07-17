@@ -20,16 +20,16 @@ namespace GenericRateLimiter
         
         public RateLimitStatus Trigger(TId id)
         {
-            bool rateLimiterFound = _rateLimiterRepository.TryGet(id, out var compositeRateLimiter) &&
+            bool rateLimiterWasFound = _rateLimiterRepository.TryGet(id, out var compositeRateLimiter) &&
                                     compositeRateLimiter is not null;
-            if (rateLimiterFound)
+            if (rateLimiterWasFound)
                 return compositeRateLimiter!.Trigger() ? RateLimitStatus.Limited : RateLimitStatus.Accessible;
             
             var actionRateLimiters = _rateLimiters.Select(
                     rl => new ActionRateLimiter(rl.GetLimit(), rl.GetPeriod()))
                 .ToList();
             
-            compositeRateLimiter = new CompositeRateLimiter(actionRateLimiters);
+            compositeRateLimiter = new RateLimiterComposite(actionRateLimiters);
             _rateLimiterRepository.AddOrUpdate(id, compositeRateLimiter);
 
             return compositeRateLimiter.Trigger() ? RateLimitStatus.Limited : RateLimitStatus.Accessible;
