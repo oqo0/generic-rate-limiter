@@ -2,37 +2,58 @@
 using GenericRateLimiter.Core.RateLimiters;
 using GenericRateLimiter.Core.WasteCleaners;
 
-namespace GenericRateLimiter
+namespace GenericRateLimiter;
+
+public class EntityRateLimiter<TId> : IEntityRateLimiter<TId>
+    where TId : notnull
 {
-    public class EntityRateLimiter<TId> : IEntityRateLimiter<TId>
-        where TId : notnull
+    private readonly RateLimiterRepository<TId> _rateLimiterRepository;
+    private readonly IEnumerable<IRateLimiter> _rateLimiters;
+
+    public EntityRateLimiter(
+        IEnumerable<ActionRateLimiter> rateLimiters,
+        WasteCleanerSettings wasteCleanerSettings)
     {
-        private readonly RateLimiterRepository<TId> _rateLimiterRepository;
-        private readonly IEnumerable<IRateLimiter> _rateLimiters;
+        _rateLimiters = rateLimiters;
+        _rateLimiterRepository = new RateLimiterRepository<TId>(wasteCleanerSettings);
+    }
+    
+    public RateLimitStatus Trigger(TId id)
+    {
+        if (GetRateLimitStatus(id, out var rateLimitStatus))
+            return rateLimitStatus;
 
-        public EntityRateLimiter(
-            IEnumerable<ActionRateLimiter> rateLimiters,
-            WasteCleanerSettings wasteCleanerSettings)
+        var newCompositeRateLimiter = GetNewCompositeRateLimiter(id);
+
+        return newCompositeRateLimiter.Trigger()
+            ? RateLimitStatus.Limited
+            : RateLimitStatus.Accessible;
+    }
+
+    private bool GetRateLimitStatus(TId id, out RateLimitStatus rateLimitStatus)
+    {
+        bool compositeRateLimiterFound = _rateLimiterRepository.TryGet(id, out var compositeRateLimiter)
+                                         && compositeRateLimiter is not null;
+        if (compositeRateLimiterFound)
         {
-            _rateLimiters = rateLimiters;
-            _rateLimiterRepository = new RateLimiterRepository<TId>(wasteCleanerSettings);
+            rateLimitStatus = compositeRateLimiter!.Trigger()
+                ? RateLimitStatus.Limited
+                : RateLimitStatus.Accessible;
+            return true;
         }
+
+        rateLimitStatus = RateLimitStatus.Accessible;
+        return false;
+    }
+    
+    private RateLimiterComposite GetNewCompositeRateLimiter(TId id)
+    {
+        var actionRateLimiters = _rateLimiters.Select(rl =>
+            new ActionRateLimiter(rl.GetLimit(), rl.GetPeriod()))
+            .ToList();
         
-        public RateLimitStatus Trigger(TId id)
-        {
-            bool rateLimiterWasFound = _rateLimiterRepository.TryGet(id, out var compositeRateLimiter) &&
-                                    compositeRateLimiter is not null;
-            if (rateLimiterWasFound)
-                return compositeRateLimiter!.Trigger() ? RateLimitStatus.Limited : RateLimitStatus.Accessible;
-            
-            var actionRateLimiters = _rateLimiters.Select(
-                    rl => new ActionRateLimiter(rl.GetLimit(), rl.GetPeriod()))
-                .ToList();
-            
-            compositeRateLimiter = new RateLimiterComposite(actionRateLimiters);
-            _rateLimiterRepository.AddOrUpdate(id, compositeRateLimiter);
-
-            return compositeRateLimiter.Trigger() ? RateLimitStatus.Limited : RateLimitStatus.Accessible;
-        }
+        var newCompositeRateLimiter = new RateLimiterComposite(actionRateLimiters);
+        _rateLimiterRepository.AddOrUpdate(id, newCompositeRateLimiter);
+        return newCompositeRateLimiter;
     }
 }
