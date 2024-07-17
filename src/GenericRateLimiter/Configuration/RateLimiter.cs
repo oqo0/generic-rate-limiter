@@ -14,7 +14,9 @@ public static class RateLimiter
         WasteCleanerSettings wasteCleanerSettings) where TId : notnull
     {
         serviceCollection.AddSingleton<IEntityRateLimiter<TId>, EntityRateLimiter<TId>>(_ =>
-            new EntityRateLimiter<TId>(rateLimiters, wasteCleanerSettings));
+            new EntityRateLimiter<TId>(
+                rateLimiters,
+                wasteCleanerSettings));
         
         return serviceCollection;
     }
@@ -27,7 +29,9 @@ public static class RateLimiter
         rateLimiterOptionsSetting.Invoke(rateLimiterOptions);
         
         serviceCollection.AddSingleton<IEntityRateLimiter<TId>, EntityRateLimiter<TId>>(_ =>
-            new EntityRateLimiter<TId>(rateLimiterOptions.GetActionRateLimiters()));
+            new EntityRateLimiter<TId>(
+                rateLimiterOptions.GetActionRateLimiters(),
+                rateLimiterOptions.GetWasteCleanerSettings()));
         
         return serviceCollection;
     }
