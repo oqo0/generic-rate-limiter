@@ -9,10 +9,17 @@
         <Version>0.2.0</Version>
         <Authors>oqo0</Authors>
         <RepositoryUrl>https://github.com/oqo0/generic-rate-limiter</RepositoryUrl>
+        <PackageReadmeFile>README.nuget.md</PackageReadmeFile>
     </PropertyGroup>
-    
+
     <ItemGroup>
-      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.1.1" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.1.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Update="README.nuget.md" Pack="true" PackagePath="README.nuget.md">
+          <Link>README.nuget.md</Link>
+        </None>
     </ItemGroup>
 
     <ItemGroup>
@@ -20,5 +27,5 @@
             <_Parameter1>$(MSBuildProjectName).Tests</_Parameter1>
         </AssemblyAttribute>
     </ItemGroup>
-    
+
 </Project>
