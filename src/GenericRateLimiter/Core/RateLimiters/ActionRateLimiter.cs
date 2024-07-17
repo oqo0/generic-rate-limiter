@@ -1,10 +1,11 @@
 namespace GenericRateLimiter.Core.RateLimiters;
 
-public class ActionRateLimiter(long limit, TimeSpan period) : IRateLimiter
+public class ActionRateLimiter(long limit, TimeSpan period, TimeSpan banPeriod) : IRateLimiter
 {
     public long Limit { get; } = limit;
     public TimeSpan Period { get; } = period;
-
+    
+    private readonly TimeSpan _banPeriod = banPeriod;
     private long _currentLimit = limit;
     private DateTime _lastResetTime = DateTime.UtcNow;
 
@@ -16,6 +17,11 @@ public class ActionRateLimiter(long limit, TimeSpan period) : IRateLimiter
     public TimeSpan GetPeriod()
     {
         return Period;
+    }
+
+    public TimeSpan GetBanPeriod()
+    {
+        return _banPeriod;
     }
 
     /// <summary>
@@ -38,6 +44,9 @@ public class ActionRateLimiter(long limit, TimeSpan period) : IRateLimiter
     /// </summary>
     private void ResetLimitIfPeriodElapsed()
     {
+        var isBanned = _currentLimit == 0;
+        if (isBanned && DateTime.UtcNow - _lastResetTime <= banPeriod)
+            return;
         if (DateTime.UtcNow - _lastResetTime <= Period)
             return;
         

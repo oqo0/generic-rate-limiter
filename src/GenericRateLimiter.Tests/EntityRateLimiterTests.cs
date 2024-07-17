@@ -16,8 +16,8 @@ public class EntityRateLimiterTests
     {
         var rateLimiters = new List<ActionRateLimiter>
         {
-            new(2, TimeSpan.FromSeconds(1)),
-            new(10, TimeSpan.FromSeconds(30))
+            new(2, TimeSpan.FromSeconds(1), TimeSpan.Zero),
+            new(10, TimeSpan.FromSeconds(30), TimeSpan.Zero)
         };
         var wasteCleanerSettings = new WasteCleanerSettings(
             TimeSpan.FromMinutes(1),
@@ -37,8 +37,8 @@ public class EntityRateLimiterTests
     {
         var rateLimiters = new List<ActionRateLimiter>
         {
-            new(1, TimeSpan.FromSeconds(1)),
-            new(10, TimeSpan.FromSeconds(30))
+            new(1, TimeSpan.FromSeconds(1), TimeSpan.Zero),
+            new(10, TimeSpan.FromSeconds(30), TimeSpan.Zero)
         };
         var wasteCleanerSettings = new WasteCleanerSettings(
             TimeSpan.FromMinutes(1),

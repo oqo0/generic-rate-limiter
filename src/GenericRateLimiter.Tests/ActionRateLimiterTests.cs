@@ -12,7 +12,10 @@ public class ActionRateLimiterTests
     [Fact]
     public void Trigger_ShouldDecreaseLimit()
     {
-        var rateLimiter = new ActionRateLimiter(2, TimeSpan.FromSeconds(1));
+        var rateLimiter = new ActionRateLimiter(
+            2,
+            TimeSpan.FromSeconds(1),
+            TimeSpan.Zero);
 
         Assert.False(rateLimiter.Trigger());
         Assert.False(rateLimiter.Trigger());
@@ -22,7 +25,10 @@ public class ActionRateLimiterTests
     [Fact]
     public void Trigger_ShouldResetAfterPeriod()
     {
-        var rateLimiter = new ActionRateLimiter(1, TimeSpan.FromSeconds(1));
+        var rateLimiter = new ActionRateLimiter(
+            1, 
+            TimeSpan.FromSeconds(1),
+            TimeSpan.Zero);
 
         Assert.False(rateLimiter.Trigger());
         Assert.True(rateLimiter.Trigger());

@@ -9,9 +9,9 @@ public class RateLimiterOptions()
     private readonly List<ActionRateLimiter> _actionRateLimiters = [];
     private WasteCleanerSettings _wasteCleanerSettings = GetDefaultWasteCleanerSettings();
 
-    public RateLimiterOptions AddRateLimiter(int limit, TimeSpan period)
+    public RateLimiterOptions AddRateLimiter(int limit, TimeSpan period, TimeSpan banTime)
     {
-       _actionRateLimiters.Add(new ActionRateLimiter(limit, period));
+       _actionRateLimiters.Add(new ActionRateLimiter(limit, period, banTime));
        return this;
     }
 

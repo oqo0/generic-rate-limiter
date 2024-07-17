@@ -7,8 +7,8 @@ var builder = Host.CreateApplicationBuilder();
 
 builder.Services.AddRateLimiter<int>(x =>
 {
-    x.AddRateLimiter(1, TimeSpan.FromSeconds(1));
-    x.AddRateLimiter(5, TimeSpan.FromSeconds(10));
+    x.AddRateLimiter(1, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(2));
+    x.AddRateLimiter(5, TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(20));
 });
 
 builder.Services.AddHostedService<SampleService>();

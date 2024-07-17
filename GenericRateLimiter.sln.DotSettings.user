@@ -1,8 +1,4 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=0522b6a4_002Dd7bc_002D4b69_002Da75f_002Df633daa55534/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="ActionRateLimiterTests" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;TestAncestor&gt;&#xD;
-    &lt;TestId&gt;xUnit::ADE901CD-AA98-417C-93A9-0EAF6309F0B4::net8.0::GenericRateLimiter.Tests.ActionRateLimiterTests&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::ADE901CD-AA98-417C-93A9-0EAF6309F0B4::net8.0::GenericRateLimiter.Tests.CompositeRateLimiterTests&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::ADE901CD-AA98-417C-93A9-0EAF6309F0B4::net8.0::GenericRateLimiter.Tests.EntityRateLimiterTests&lt;/TestId&gt;&#xD;
-  &lt;/TestAncestor&gt;&#xD;
+  &lt;Project Location="C:\Users\oqo0\RiderProjects\GenericRateLimiter\src\GenericRateLimiter.Tests" Presentation="&amp;lt;src&amp;gt;\&amp;lt;GenericRateLimiter.Tests&amp;gt;" /&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

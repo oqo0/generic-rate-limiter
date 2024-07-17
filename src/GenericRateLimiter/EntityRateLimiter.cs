@@ -49,7 +49,7 @@ public class EntityRateLimiter<TId> : IEntityRateLimiter<TId>
     private RateLimiterComposite GetNewCompositeRateLimiter(TId id)
     {
         var actionRateLimiters = _rateLimiters.Select(rl =>
-            new ActionRateLimiter(rl.GetLimit(), rl.GetPeriod()))
+            new ActionRateLimiter(rl.GetLimit(), rl.GetPeriod(), rl.GetBanPeriod()))
             .ToList();
         
         var newCompositeRateLimiter = new RateLimiterComposite(actionRateLimiters);

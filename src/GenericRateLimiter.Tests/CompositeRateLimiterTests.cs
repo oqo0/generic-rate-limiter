@@ -14,8 +14,8 @@ public class RateLimiterCompositeTests
     {
         var rateLimiters = new List<ActionRateLimiter>
         {
-            new(1, TimeSpan.FromSeconds(1)),
-            new(2, TimeSpan.FromSeconds(5))
+            new(1, TimeSpan.FromSeconds(1), TimeSpan.Zero),
+            new(2, TimeSpan.FromSeconds(5), TimeSpan.Zero)
         };
         var compositeRateLimiter = new RateLimiterComposite(rateLimiters);
 
