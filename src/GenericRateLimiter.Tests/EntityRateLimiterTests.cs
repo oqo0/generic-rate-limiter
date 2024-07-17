@@ -1,5 +1,6 @@
 ﻿using GenericRateLimiter.Core;
 using GenericRateLimiter.Core.RateLimiters;
+using GenericRateLimiter.Core.WasteCleaners;
 
 namespace GenericRateLimiter.Tests;
 
@@ -18,7 +19,12 @@ public class EntityRateLimiterTests
             new(2, TimeSpan.FromSeconds(1)),
             new(10, TimeSpan.FromSeconds(30))
         };
-        var entityRateLimiter = new EntityRateLimiter<char>(rateLimiters);
+        var wasteCleanerSettings = new WasteCleanerSettings(
+            TimeSpan.FromMinutes(1),
+            TimeSpan.FromMinutes(1));
+        
+        var entityRateLimiter = new EntityRateLimiter<char>(
+            rateLimiters, wasteCleanerSettings);
 
         Assert.Equal(RateLimitStatus.Accessible, entityRateLimiter.Trigger('A'));
         Assert.Equal(RateLimitStatus.Accessible, entityRateLimiter.Trigger('A'));
@@ -34,12 +40,17 @@ public class EntityRateLimiterTests
             new(1, TimeSpan.FromSeconds(1)),
             new(10, TimeSpan.FromSeconds(30))
         };
-        var entityRateLimiter = new EntityRateLimiter<char>(rateLimiters);
+        var wasteCleanerSettings = new WasteCleanerSettings(
+            TimeSpan.FromMinutes(1),
+            TimeSpan.FromMinutes(1));
+        
+        var entityRateLimiter = new EntityRateLimiter<char>(
+            rateLimiters, wasteCleanerSettings);
 
         Assert.Equal(RateLimitStatus.Accessible, entityRateLimiter.Trigger('A'));
         Assert.Equal(RateLimitStatus.Limited, entityRateLimiter.Trigger('A'));
 
-        System.Threading.Thread.Sleep(1100);
+        Thread.Sleep(1100);
 
         Assert.Equal(RateLimitStatus.Accessible, entityRateLimiter.Trigger('A'));
     }

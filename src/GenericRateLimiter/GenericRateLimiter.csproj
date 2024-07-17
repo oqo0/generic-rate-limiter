@@ -6,7 +6,7 @@
         <Nullable>enable</Nullable>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <PackageId>oqo0.GenericRateLimiter</PackageId>
-        <Version>0.0.2</Version>
+        <Version>0.1.2</Version>
         <Authors>oqo0</Authors>
         <RepositoryUrl>https://github.com/oqo0/generic-rate-limiter</RepositoryUrl>
     </PropertyGroup>

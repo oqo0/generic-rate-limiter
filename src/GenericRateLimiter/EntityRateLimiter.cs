@@ -10,13 +10,9 @@ namespace GenericRateLimiter
         private readonly RateLimiterRepository<TId> _rateLimiterRepository;
         private readonly IEnumerable<IRateLimiter> _rateLimiters;
 
-        public EntityRateLimiter(IEnumerable<IRateLimiter> rateLimiters)
-        {
-            _rateLimiters = rateLimiters;
-            _rateLimiterRepository = new RateLimiterRepository<TId>(GetWasteCleanerSettingsForLimiters());
-        }
-
-        public EntityRateLimiter(IEnumerable<ActionRateLimiter> rateLimiters, WasteCleanerSettings wasteCleanerSettings)
+        public EntityRateLimiter(
+            IEnumerable<ActionRateLimiter> rateLimiters,
+            WasteCleanerSettings wasteCleanerSettings)
         {
             _rateLimiters = rateLimiters;
             _rateLimiterRepository = new RateLimiterRepository<TId>(wasteCleanerSettings);
@@ -37,13 +33,6 @@ namespace GenericRateLimiter
             _rateLimiterRepository.AddOrUpdate(id, compositeRateLimiter);
 
             return compositeRateLimiter.Trigger() ? RateLimitStatus.Limited : RateLimitStatus.Accessible;
-        }
-
-        private WasteCleanerSettings GetWasteCleanerSettingsForLimiters()
-        {
-            var longestRateLimiter = _rateLimiters.Max(x => x.GetPeriod());
-            return new WasteCleanerSettings(
-                TimeSpan.FromMinutes(1), longestRateLimiter * 2);
         }
     }
 }
